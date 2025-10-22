@@ -31,16 +31,14 @@ public class ConfiguracoesSeguranca {
 
     @Bean // bean para configuração o filtro do spring para que a página de login personalizada seja carregada corretamente
     public SecurityFilterChain filtroDeSeguranca(HttpSecurity httpSecurity) throws Exception {
-       return httpSecurity.authorizeHttpRequests(req -> {
-                    req.requestMatchers("/css/**", "/js/**", "/assets/**", "/login").permitAll();
-                    req.anyRequest().authenticated();
+        return httpSecurity.authorizeHttpRequests(req -> {//configura a autorização
+                    req.requestMatchers("/css/**", "/js/**", "/assets/**").permitAll();//libera a configuração de arquivos para que seja carregado o /login
+                    req.anyRequest().authenticated();//restringe qualquer outros tipos de requests tem que ser autenticados
                 })
-                .formLogin(form -> form
-                        .loginPage("/login")
-                        .defaultSuccessUrl("/")
-                        .permitAll())
+                .formLogin(form -> form.loginPage("/login")//configura o formLogin A página de login da aplicação é acessível pela URL /login
+                        .defaultSuccessUrl("/")//em caso de sucesso direciona a home
+                        .permitAll())//permite que qualquer um acesse
                 .build();
-
 
     }
 }
