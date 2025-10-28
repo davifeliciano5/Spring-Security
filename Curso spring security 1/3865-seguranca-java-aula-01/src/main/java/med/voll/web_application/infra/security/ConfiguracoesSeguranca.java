@@ -2,33 +2,21 @@ package med.voll.web_application.infra.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
 public class ConfiguracoesSeguranca {
-    @Bean
-    public UserDetailsService dadosUsuariosCadastrados(){
-        UserDetails usuario1 = User.builder()
-                .username("joao@email.com")
-                .password("{noop}joao123")
-                .build();
-        UserDetails usuario2 = User.builder()
-                .username("maria@email.com")
-                .password("{noop}maria123")
-                .build();
-        UserDetails usuario3 = User.builder()
-                .username("iasmin@email.com")
-                .password("{noop}iasmin123")
-                .build();
-        return new InMemoryUserDetailsManager(usuario1, usuario2, usuario3);
-    }
+
 
     @Bean
     public SecurityFilterChain filtrosSeguranca(HttpSecurity http) throws Exception {
@@ -42,6 +30,14 @@ public class ConfiguracoesSeguranca {
                                 .permitAll())
                 .logout(logout -> logout.logoutSuccessUrl("/login?logout")
                         .permitAll())
+                .rememberMe(rememberMe -> rememberMe.key("lembrardEmim")
+                        .alwaysRemember(true))
+                .csrf(Customizer.withDefaults())
                 .build();
+    }
+
+    @Bean
+    public PasswordEncoder codigicadorSenha(){
+        return new BCryptPasswordEncoder();
     }
 }
