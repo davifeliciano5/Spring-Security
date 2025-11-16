@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ConsultaService {
-    private final ConsultaRepository consultaRepository;
+    private final ConsultaRepository consultaRepository; // chamando o repositório
     private final MedicoRepository medicorepository;
     private final PacienteRepository pacienteRepository;
 
